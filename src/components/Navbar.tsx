@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import { navItems } from "../data/portfolio"
+import { navItems, profile } from "../data/portfolio"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [activeId, setActiveId] = useState("home")
+  const [activeId, setActiveId] = useState("work")
 
   useEffect(() => {
-    const sections = navItems
-      .map((item) => document.getElementById(item.id))
+    const sections = ["work", "roles", "tools", "products", "contact"]
+      .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => section !== null)
 
     const observer = new IntersectionObserver(
@@ -16,12 +16,23 @@ const Navbar = () => {
         if (!visible?.target.id) return
         setActiveId(visible.target.id)
       },
-      { rootMargin: "-45% 0px -45% 0px" },
+      { rootMargin: "-40% 0px -50% 0px" },
     )
 
     sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false)
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => document.removeEventListener("keydown", handleKeyDown)
+  }, [isOpen])
 
   const handleToggleMenu = () => {
     setIsOpen((current) => !current)
@@ -32,56 +43,68 @@ const Navbar = () => {
   }
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 bg-ink/90 backdrop-blur">
-      <div className="site-container flex items-center justify-between py-4">
-        <a
-          href="#home"
-          className="grid h-12 w-12 place-items-center rounded-full border-2 border-cyan text-sm font-semibold text-cyan transition duration-300 hover:scale-105 hover:bg-cyan hover:text-ink hover:shadow-[0_0_16px_#0ef]"
-          aria-label="Quach Trong Nhan, back to home"
-        >
-          QN
+    <header className="nav">
+      <a className="skip" href="#work">
+        Skip to work
+      </a>
+      <div className="wrap flex h-full items-center gap-6">
+        <a href="#work" className="flex items-center gap-3 text-ink no-underline" aria-label="Quach Trong Nhan, back to work">
+          <span className="grid h-9 w-9 place-items-center rounded-[4px] bg-action text-[15px] font-semibold text-sheet-ink" aria-hidden="true">
+            Q
+          </span>
+          <span className="display hidden text-[20px] sm:inline">{profile.name}</span>
         </a>
-        <button
-          type="button"
-          className="rounded-md border border-white/20 px-3 py-2 text-sm transition duration-300 hover:border-cyan hover:text-cyan md:hidden"
-          aria-expanded={isOpen}
-          aria-controls="mobile-nav"
-          aria-label={isOpen ? "Close menu" : "Open menu"}
-          onClick={handleToggleMenu}
-        >
-          Menu
-        </button>
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+        <nav className="ml-auto hidden items-center gap-8 lg:flex" aria-label="Primary">
           {navItems.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
-              className={
-                activeId === item.id
-                  ? "border-b-2 border-cyan pb-1 text-sm font-medium text-cyan transition duration-300"
-                  : "pb-1 text-sm font-medium text-white transition duration-300 hover:text-cyan"
-              }
+              className="nav-link"
+              aria-current={activeId === item.id ? "page" : undefined}
             >
               {item.label}
             </a>
           ))}
         </nav>
+        <a className="btn btn-primary ml-auto hidden px-6 sm:inline-flex lg:ml-0" href={`mailto:${profile.email}`}>
+          Email Nhan
+        </a>
+        <button
+          type="button"
+          className="btn btn-secondary ml-auto inline-flex h-11 w-11 shrink-0 px-0 sm:ml-0 lg:hidden"
+          aria-expanded={isOpen}
+          aria-controls="mobile-nav"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          onClick={handleToggleMenu}
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+            {isOpen ? (
+              <path d="M4 4l10 10M14 4 4 14" fill="none" stroke="currentColor" strokeWidth="1.6" />
+            ) : (
+              <path d="M2 5h14M2 13h14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            )}
+          </svg>
+        </button>
       </div>
       {isOpen ? (
-        <nav id="mobile-nav" className="border-t border-white/10 px-4 py-3 md:hidden" aria-label="Mobile">
-          <ul className="flex flex-col gap-2">
-            {navItems.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
-                  className="block rounded-md px-2 py-2 text-sm transition duration-300 hover:bg-white/5 hover:text-cyan"
-                  onClick={handleNavClick}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+        <nav
+          id="mobile-nav"
+          className="fixed inset-0 top-14 z-10 flex flex-col bg-paper px-6 py-6 lg:hidden"
+          aria-label="Mobile"
+        >
+          {navItems.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className="flex h-14 items-center border-b border-line text-base font-medium text-ink no-underline"
+              onClick={handleNavClick}
+            >
+              {item.label}
+            </a>
+          ))}
+          <a className="btn btn-primary mt-6 inline-flex w-full px-6" href={`mailto:${profile.email}`} onClick={handleNavClick}>
+            Email Nhan
+          </a>
         </nav>
       ) : null}
     </header>

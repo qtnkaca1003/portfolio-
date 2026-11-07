@@ -1,143 +1,74 @@
-import { useEffect, useState } from "react"
-import type { Project } from "../data/portfolio"
-import EqualGrid from "../components/EqualGrid"
-import Reveal from "../components/Reveal"
+import { useState } from "react"
 import { projects } from "../data/portfolio"
 
-type ProjectModalProps = {
-  project: Project
-  onClose: () => void
-}
+const Products = () => {
+  const [selectedName, setSelectedName] = useState(projects[0]?.name ?? "")
+  const selected = projects.find((project) => project.name === selectedName) ?? projects[0]
 
-const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return
-      onClose()
-    }
-
-    document.addEventListener("keydown", handleKeyDown)
-    document.body.style.overflow = "hidden"
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown)
-      document.body.style.overflow = ""
-    }
-  }, [onClose])
-
-  const handleBackdropClick = () => {
-    onClose()
-  }
-
-  return (
-    <div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/70 px-4 py-8"
-      onClick={handleBackdropClick}
-    >
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="project-dialog-title"
-        className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-3xl border border-cyan bg-[#1b2430] p-6 shadow-[0_0_28px_rgba(0,238,255,0.45)] sm:p-8"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 id="project-dialog-title" className="text-3xl font-bold">
-              {project.name}
-            </h3>
-            <p className="mt-2 text-sm font-medium text-cyan">
-              {project.company} · {project.period}
-            </p>
-          </div>
-          <button
-            type="button"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 text-lg text-white transition duration-300 hover:bg-cyan hover:text-ink"
-            aria-label="Close project details"
-            onClick={onClose}
-          >
-            ×
-          </button>
-        </div>
-        <h4 className="mt-6 text-lg font-semibold text-cyan">Description</h4>
-        <p className="mt-2 text-sm leading-7 text-white/85">{project.summary}</p>
-        <h4 className="mt-6 text-lg font-semibold text-cyan">Main responsibilities</h4>
-        <ul className="mt-2 list-disc space-y-3 pl-5">
-          {project.highlights.map((item) => (
-            <li key={item} className="text-sm leading-6 text-white/85">
-              {item}
-            </li>
-          ))}
-        </ul>
-        <h4 className="mt-6 text-lg font-semibold text-cyan">Technologies</h4>
-        <ul className="mt-3 flex flex-wrap gap-2">
-          {project.stack.map((tech) => (
-            <li key={tech} className="rounded-full bg-[#2a3340] px-3 py-1 text-sm text-white/90">
-              {tech}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-const Projects = () => {
-  const [selectedName, setSelectedName] = useState("")
-  const selectedProject = projects.find((project) => project.name === selectedName) ?? null
-
-  const handleOpen = (name: string) => {
+  const handleSelect = (name: string) => {
     setSelectedName(name)
   }
 
-  const handleClose = () => {
-    setSelectedName("")
-  }
+  if (!selected) return null
 
   return (
-    <section id="projects" className="py-12">
-      <div className="site-container">
-        <Reveal>
-          <h2 className="text-center text-4xl font-bold">
-            My <span className="text-cyan">Projects</span>
-          </h2>
-        </Reveal>
-        <EqualGrid>
-          {projects.map((project, index) => (
-            <Reveal key={project.name} className="h-full" delay={(index % 3) * 120}>
-              <article
-                data-equal-card
-                onClick={() => handleOpen(project.name)}
-                className="cursor-pointer flex h-full flex-col rounded-2xl border border-transparent bg-[#252b36] p-5 transition duration-300 hover:-translate-y-2 hover:border-cyan/50 hover:shadow-[0_0_22px_rgba(0,238,255,0.28)]"
-              >
-                <h3 className="text-xl font-bold">{project.name}</h3>
-                <p className="mt-2 text-sm font-medium text-cyan">
-                  {project.company} · {project.period}
-                </p>
-                <p className="mt-3 text-sm leading-6 text-white/80">{project.summary}</p>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {project.stack.map((tech) => (
-                    <li key={tech} className="rounded-full bg-ink px-3 py-1 text-xs">
-                      {tech}
-                    </li>
-                  ))}
-                </ul>
+    <section id="products" className="screen border-t border-line bg-surface">
+      <div className="wrap">
+        <p className="font-mono text-[13px] text-action">04</p>
+        <h2 className="display h2 mt-3">Shipped products</h2>
+        <p className="mt-6 max-w-[62ch] text-base text-muted">
+          Six products. Gensai and Remote Work Cloud share October 2024 to December 2025.
+        </p>
+        <div className="mt-10 grid items-start gap-6 lg:grid-cols-12">
+          <div className="lg:col-span-4" role="tablist" aria-label="Products">
+            {projects.map((project) => {
+              const isSelected = project.name === selected.name
+              const tabClass = isSelected
+                ? "grid w-full gap-1 border border-action bg-paper px-4 py-4 text-left"
+                : "grid w-full gap-1 border border-line px-4 py-4 text-left transition-transform duration-150 hover:-translate-y-px"
+              return (
                 <button
+                  key={project.name}
                   type="button"
-                  className="cursor-pointer mt-auto pt-5 self-start text-sm font-semibold text-cyan transition duration-300 hover:translate-x-1 hover:text-white"
-                  aria-haspopup="dialog"
-                  onClick={() => handleOpen(project.name)}
+                  role="tab"
+                  id={`product-tab-${project.name}`}
+                  aria-selected={isSelected}
+                  aria-controls="product-panel"
+                  className={`${tabClass} mb-2 rounded-[4px]`}
+                  onClick={() => handleSelect(project.name)}
                 >
-                  View details →
+                  <span className="text-base font-medium">{project.name}</span>
+                  <span className="text-[13px] text-muted">
+                    {project.company} · {project.period}
+                  </span>
                 </button>
-              </article>
-            </Reveal>
-          ))}
-        </EqualGrid>
+              )
+            })}
+          </div>
+          <article
+            id="product-panel"
+            role="tabpanel"
+            aria-labelledby={`product-tab-${selected.name}`}
+            className="rounded-[4px] border border-line bg-paper p-6 sm:p-8 lg:col-span-8"
+          >
+            <p className="font-mono text-[13px] text-action">
+              {selected.company} · {selected.period}
+            </p>
+            <h3 className="display mt-3 text-[28px] leading-9">{selected.title}</h3>
+            <p className="mt-4 max-w-[62ch] text-base text-muted">{selected.summary}</p>
+            <ul className="mt-6">
+              {selected.points.map((point) => (
+                <li key={point} className="border-t border-line py-3 text-base">
+                  {point}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 font-mono text-[13px] text-muted">{selected.stack.join(" · ")}</p>
+          </article>
+        </div>
       </div>
-      {selectedProject ? <ProjectModal project={selectedProject} onClose={handleClose} /> : null}
     </section>
   )
 }
 
-export default Projects
+export default Products
