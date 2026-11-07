@@ -1,3 +1,4 @@
+import type { MouseEvent } from "react"
 import { pages, type PageId } from "../data/portfolio"
 import ThemeToggle from "./ThemeToggle"
 
@@ -9,10 +10,15 @@ type TopbarProps = {
 }
 
 const Topbar = ({ active, isOpen, onToggle, onSelect }: TopbarProps) => {
+  const handleSelect = (event: MouseEvent<HTMLAnchorElement>, id: PageId) => {
+    event.preventDefault()
+    onSelect(id)
+  }
+
   return (
     <div className="min-[1200px]:hidden">
       <div className="fixed inset-x-0 top-0 z-30 flex h-16 items-center justify-between bg-side px-5">
-        <a href="#home" className="font-logo text-2xl font-black tracking-[4px] text-ink no-underline" onClick={() => onSelect("home")}>
+        <a href="#home" className="font-logo text-2xl font-black tracking-[4px] text-ink no-underline" onClick={(event) => handleSelect(event, "home")}>
           NHAN
         </a>
         <div className="flex items-center gap-4">
@@ -44,7 +50,7 @@ const Topbar = ({ active, isOpen, onToggle, onSelect }: TopbarProps) => {
                   href={`#${page.id}`}
                   className="flex h-14 items-center font-display text-base font-medium text-ink no-underline"
                   aria-current={active === page.id ? "page" : undefined}
-                  onClick={() => onSelect(page.id)}
+                  onClick={(event) => handleSelect(event, page.id)}
                 >
                   {page.label}
                 </a>

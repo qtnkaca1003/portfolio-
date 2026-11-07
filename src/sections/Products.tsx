@@ -1,20 +1,16 @@
-import { useState, type MouseEvent } from "react"
+import { useState } from "react"
 import SectionTitle from "../components/SectionTitle"
-import Tile from "../components/Tile"
 import { projects, type Project } from "../data/portfolio"
 import type { ModalData } from "../components/Modal"
 
-type PortfolioProps = {
+type ProductsProps = {
   onOpen: (data: ModalData) => void
 }
 
 const filters = ["All", "Xsofts", "Runsystem"] as const
 
-const Portfolio = ({ onOpen }: PortfolioProps) => {
+const Products = ({ onOpen }: ProductsProps) => {
   const [filter, setFilter] = useState<(typeof filters)[number]>("All")
-  const [label, setLabel] = useState("")
-  const [point, setPoint] = useState({ x: 0, y: 0 })
-
   const visible = filter === "All" ? projects : projects.filter((project) => project.group === filter)
 
   const handleOpen = (project: Project) => {
@@ -23,7 +19,6 @@ const Portfolio = ({ onOpen }: PortfolioProps) => {
       kicker: project.title,
       summary: project.summary,
       points: project.points,
-      art: project.art,
       meta: [
         { label: "Client", value: project.company },
         { label: "Date", value: project.period },
@@ -32,16 +27,13 @@ const Portfolio = ({ onOpen }: PortfolioProps) => {
     })
   }
 
-  const handleMove = (event: MouseEvent, name: string) => {
-    setLabel(name)
-    setPoint({ x: event.clientX + 16, y: event.clientY + 16 })
-  }
+  const handleFilter = (item: (typeof filters)[number]) => setFilter(item)
 
   return (
     <div className="enter mx-auto w-full max-w-[968px] px-5 py-24 sm:px-10">
       <SectionTitle
-        kicker="projects"
-        title="Projects"
+        kicker="products"
+        title="Products"
         extra={
           <div className="flex gap-6" role="tablist" aria-label="Filter projects">
             {filters.map((item) => (
@@ -51,7 +43,7 @@ const Portfolio = ({ onOpen }: PortfolioProps) => {
                 role="tab"
                 aria-selected={filter === item}
                 className={filter === item ? "font-display text-[15px] font-medium text-ink" : "font-display text-[15px] font-medium text-muted transition-colors hover:text-ink"}
-                onClick={() => setFilter(item)}
+                onClick={() => handleFilter(item)}
               >
                 {item}
               </button>
@@ -59,35 +51,34 @@ const Portfolio = ({ onOpen }: PortfolioProps) => {
           </div>
         }
       />
-      <ul className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid gap-6 md:grid-cols-2">
         {visible.map((project) => (
           <li key={project.name}>
             <button
               type="button"
-              className="group relative block w-full overflow-hidden text-left"
-              aria-label={project.name}
+              className="flex h-full w-full flex-col bg-card p-6 text-left transition-transform hover:-translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              aria-label={`${project.name}, view project details`}
               onClick={() => handleOpen(project)}
-              onMouseMove={(event) => handleMove(event, project.name)}
-              onMouseLeave={() => setLabel("")}
-              onFocus={() => setLabel("")}
             >
-              <div className="aspect-[4/3] transition-transform duration-300 group-hover:scale-105">
-                <Tile art={project.art} label={project.name} />
-              </div>
+              <p className="flex items-start justify-between gap-4 font-display text-[11px] font-semibold uppercase tracking-wide text-muted">
+                <span>{project.company}</span>
+                <span className="shrink-0">{project.period}</span>
+              </p>
+              <h3 className="mt-3 font-display text-xl font-bold text-ink">{project.name}</h3>
+              <p className="mt-3 line-clamp-3 flex-1">{project.summary}</p>
+              <ul className="mt-5 flex flex-wrap gap-2" aria-label="Skills">
+                {project.stack.map((skill) => (
+                  <li key={skill} className="bg-chip px-2.5 py-1 font-display text-[11px] font-medium text-ink">
+                    {skill}
+                  </li>
+                ))}
+              </ul>
             </button>
           </li>
         ))}
       </ul>
-      {label ? (
-        <div
-          className="pointer-events-none fixed z-50 hidden bg-ink px-3 py-1 font-display text-sm text-on-ink min-[1040px]:block"
-          style={{ left: point.x, top: point.y }}
-        >
-          {label}
-        </div>
-      ) : null}
     </div>
   )
 }
 
-export default Portfolio
+export default Products

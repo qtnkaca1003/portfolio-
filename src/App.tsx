@@ -8,10 +8,8 @@ import { pages, type PageId } from "./data/portfolio"
 import About from "./sections/About"
 import Contact from "./sections/Contact"
 import Home from "./sections/Home"
-import News from "./sections/News"
-import Portfolio from "./sections/Portfolio"
-import Services from "./sections/Services"
 import { ThemeProvider } from "./theme"
+import Products from "./sections/Products"
 
 const isPage = (value: string): value is PageId => pages.some((page) => page.id === value)
 
@@ -21,17 +19,32 @@ const Shell = () => {
   const [ready, setReady] = useState(false)
   const [isLive, setIsLive] = useState(false)
   const [modal, setModal] = useState<ModalData | null>(null)
+  const [leaving, setLeaving] = useState<PageId | null>(null)
   const sectionRef = useRef(section)
   const lockRef = useRef(false)
+  const leaveTimer = useRef(0)
+  const stageRef = useRef<HTMLDivElement>(null)
 
   const handleDone = useCallback(() => setReady(true), [])
 
-  const handleSection = (id: PageId) => {
+  const showSection = useCallback((id: PageId) => {
     if (id === sectionRef.current) return
+    const nextNode = document.getElementById(id)
+    if (nextNode) nextNode.scrollTop = 0
+    if (stageRef.current) stageRef.current.scrollTop = 0
+    window.scrollTo(0, 0)
+    window.clearTimeout(leaveTimer.current)
+    setLeaving(sectionRef.current)
     sectionRef.current = id
     setSection(id)
     setIsOpen(false)
     setModal(null)
+    leaveTimer.current = window.setTimeout(() => setLeaving(null), 920)
+  }, [])
+
+  const handleSection = (id: PageId) => {
+    if (id === sectionRef.current) return
+    showSection(id)
     if (window.location.hash !== `#${id}`) history.pushState(null, "", `#${id}`)
   }
 
@@ -44,11 +57,20 @@ const Shell = () => {
   }, [])
 
   useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return
+    const handleStageScroll = () => {
+      if (stage.scrollTop !== 0) stage.scrollTop = 0
+    }
+    stage.addEventListener("scroll", handleStageScroll)
+    return () => stage.removeEventListener("scroll", handleStageScroll)
+  }, [])
+
+  useEffect(() => {
     const applyHash = () => {
       const id = window.location.hash.replace("#", "")
       if (!isPage(id) || id === sectionRef.current) return
-      sectionRef.current = id
-      setSection(id)
+      showSection(id)
     }
     applyHash()
     window.addEventListener("hashchange", applyHash)
@@ -57,11 +79,7 @@ const Shell = () => {
       window.removeEventListener("hashchange", applyHash)
       window.removeEventListener("popstate", applyHash)
     }
-  }, [])
-
-  useEffect(() => {
-    document.getElementById(section)?.scrollTo({ top: 0 })
-  }, [section])
+  }, [showSection])
 
   useEffect(() => {
     const go = (step: number) => {
@@ -73,7 +91,7 @@ const Shell = () => {
       handleSection(next.id)
       window.setTimeout(() => {
         lockRef.current = false
-      }, 720)
+      }, 920)
     }
 
     const atEdge = (step: number) => {
@@ -84,6 +102,10 @@ const Shell = () => {
     }
 
     const handleWheel = (event: WheelEvent) => {
+      if (lockRef.current) {
+        event.preventDefault()
+        return
+      }
       const target = event.target
       if (target instanceof Element && target.closest("input, textarea, [role=dialog]")) return
       const step = event.deltaY > 0 ? 1 : -1
@@ -113,7 +135,7 @@ const Shell = () => {
       window.removeEventListener("touchstart", handleTouchStart)
       window.removeEventListener("touchend", handleTouchEnd)
     }
-  }, [ready, modal, isOpen])
+  }, [ready, modal, isOpen, showSection])
 
   useEffect(() => {
     document.body.style.overflow = modal || isOpen ? "hidden" : ""
@@ -129,20 +151,25 @@ const Shell = () => {
       <Sidebar active={section} onSelect={handleSection} />
       <Topbar active={section} isOpen={isOpen} onToggle={handleToggleMenu} onSelect={handleSection} />
       <main className="relative h-full overflow-hidden bg-page min-[1200px]:pl-[350px]">
-        <div className={isLive ? "stage is-live relative h-full overflow-hidden border-line min-[1200px]:border-l" : "stage relative h-full overflow-hidden border-line min-[1200px]:border-l"}>
+        <div ref={stageRef} className={isLive ? "stage is-live relative h-full overflow-hidden border-line min-[1200px]:border-l" : "stage relative h-full overflow-hidden border-line min-[1200px]:border-l"}>
           {(
             [
               ["home", <Home />],
               ["about", <About active={section === "about"} />],
-              ["service", <Services active={section === "service"} onOpen={setModal} />],
-              ["projects", <Portfolio onOpen={setModal} />],
-              ["news", <News onOpen={setModal} />],
+              ["products", <Products onOpen={setModal} />],
               ["contact", <Contact />],
             ] as const
           ).map(([id, node]) => {
             const isCurrent = section === id
             const isBefore = pages.findIndex((page) => page.id === id) < pages.findIndex((page) => page.id === section)
-            const place = isCurrent ? "panel is-current" : isBefore ? "panel is-before" : "panel"
+            const place = [
+              "panel",
+              isBefore && !isCurrent ? "is-before" : "",
+              isCurrent ? "is-current" : "",
+              id === leaving && !isCurrent ? "is-leave" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")
             return (
               <section
                 key={id}

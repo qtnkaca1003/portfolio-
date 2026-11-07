@@ -1,24 +1,21 @@
 import SectionTitle from "../components/SectionTitle";
-import {
-  education,
-  interests,
-  jobs,
-  knowledge,
-  languageSkills,
-  marks,
-  profile,
-  programSkills,
-} from "../data/portfolio";
+import { marks, profile, resume } from "../data/portfolio";
 
 type AboutProps = {
   active: boolean;
 };
 
-const bars = (active: boolean, items: { name: string; value: number }[]) =>
+const bars = (
+  active: boolean,
+  items: { name: string; value: number; file?: string }[],
+) =>
   items.map((item) => (
     <div key={item.name} className="mb-4 last:mb-0">
       <p className="flex justify-between font-medium text-ink">
-        <span>{item.name}</span>
+        <div className="flex items-center gap-2">
+          {item.file && <img src={item.file} alt={item.name} className="w-4 h-4" />}
+          <span>{item.name}</span>
+        </div>
         <span>{item.value}%</span>
       </p>
       <div className="mt-1 h-[3px] bg-track">
@@ -53,35 +50,10 @@ const info = (rows: { label: string; value: string; href?: string }[]) => (
 );
 
 const About = ({ active }: AboutProps) => {
-  /* const [quote, setQuote] = useState(0);
-
-  useEffect(() => {
-    if (!active) return;
-    const timer = window.setInterval(() => {
-      setQuote((current) => (current + 1) % testimonials.length);
-    }, 5000);
-    return () => window.clearInterval(timer);
-  }, [active]);
-
-  const current = testimonials[quote];
-
-  const handlePrev = () => {
-    setQuote((item) => (item + testimonials.length - 1) % testimonials.length);
-  };
-
-  const handleNext = () => {
-    setQuote((item) => (item + 1) % testimonials.length);
-  }; */
-
   return (
     <div className="enter w-full ">
       <div className="mx-auto w-full max-w-[968px] px-5 py-10 sm:px-10">
         <SectionTitle kicker="About" title="About Me" />
-        {/* <img
-          src={profile.nhan}
-          alt=""
-          className="mb-9 w-full max-h-[420px] object-cover"
-        /> */}
         <div className="border-b border-line pb-5">
           <h3 className="font-display text-[22px] font-bold text-ink">
             {profile.name}
@@ -105,8 +77,8 @@ const About = ({ active }: AboutProps) => {
           ])}
           {info([
             { label: "Nationality", value: profile.nationality },
-            { label: "Study", value: education.school },
-            { label: "Degree", value: education.degree },
+            { label: "Study", value: resume.education.school },
+            { label: "Degree", value: resume.education.degree },
             { label: "Interest", value: profile.interest },
             { label: "Freelance", value: profile.freelance },
           ])}
@@ -129,13 +101,13 @@ const About = ({ active }: AboutProps) => {
             <h3 className="mb-6 font-display text-xl font-bold text-ink">
               Programming Skills
             </h3>
-            {bars(active, programSkills)}
+            {bars(active, resume.programSkills)}
           </div>
           <div>
             <h3 className="mb-6 font-display text-xl font-bold text-ink">
               Language Skills
             </h3>
-            {bars(active, languageSkills)}
+            {bars(active, resume.languageSkills)}
           </div>
         </div>
       </div>
@@ -147,7 +119,7 @@ const About = ({ active }: AboutProps) => {
               Knowledge
             </h3>
             <ul>
-              {knowledge.map((item) => (
+              {resume.knowledge.map((item) => (
                 <li key={item} className="border-b border-line py-2 text-ink">
                   {item}
                 </li>
@@ -159,7 +131,7 @@ const About = ({ active }: AboutProps) => {
               Interests
             </h3>
             <ul>
-              {interests.map((item) => (
+              {resume.interests.map((item) => (
                 <li key={item} className="border-b border-line py-2 text-ink">
                   {item}
                 </li>
@@ -167,42 +139,6 @@ const About = ({ active }: AboutProps) => {
             </ul>
           </div>
         </div>
-        {/* 
-        <div className="border-t border-line pt-16">
-          <h3 className="mb-8 font-display text-xl font-bold text-ink">
-            Testimonials
-          </h3>
-          <figure className="relative border-2 border-quote-line bg-quote p-8 sm:p-10">
-            <blockquote className="text-ink">{current.quote}</blockquote>
-            <span className="absolute -bottom-4 left-12 h-0 w-0 border-l-[18px] border-t-[18px] border-l-transparent border-t-quote-line" />
-          </figure>
-          <figcaption className="mt-8 flex items-center justify-between gap-4 pl-4">
-            <div>
-              <p className="font-display text-base font-semibold text-ink">
-                {current.name}
-              </p>
-              <p className="text-sm">{current.role}</p>
-            </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className="grid h-10 w-10 place-items-center border border-line text-ink"
-                aria-label="Previous note"
-                onClick={handlePrev}
-              >
-                ‹
-              </button>
-              <button
-                type="button"
-                className="grid h-10 w-10 place-items-center border border-line text-ink"
-                aria-label="Next note"
-                onClick={handleNext}
-              >
-                ›
-              </button>
-            </div>
-          </figcaption>
-        </div> */}
       </div>
       <div className="bg-card py-16">
         <div className="mx-auto w-full max-w-[968px] px-5 sm:px-10">
@@ -213,13 +149,13 @@ const About = ({ active }: AboutProps) => {
               </h3>
               <div className="border-l border-line pl-6">
                 <p className="font-display text-sm text-muted">
-                  {education.period}
+                  {resume.education.period}
                 </p>
                 <h4 className="font-display text-base font-semibold text-ink">
-                  {education.school}
+                  {resume.education.school}
                 </h4>
                 <p>
-                  {education.degree} · {education.note}
+                  {resume.education.degree} · {resume.education.note}
                 </p>
               </div>
             </div>
@@ -228,7 +164,7 @@ const About = ({ active }: AboutProps) => {
                 Experience
               </h3>
               <ul className="border-l border-line">
-                {jobs.map((job) => (
+                {resume.jobs.map((job) => (
                   <li
                     key={job.company}
                     className="relative mb-8 pl-6 last:mb-0"
@@ -248,41 +184,6 @@ const About = ({ active }: AboutProps) => {
           </div>
         </div>
       </div>
-      {/* <div className="border-t border-line pt-16">
-          <h3 className="mb-8 font-display text-xl font-bold text-ink">
-            Testimonials
-          </h3>
-          <figure className="relative border-2 border-quote-line bg-quote p-8 sm:p-10">
-            <blockquote className="text-ink">{current.quote}</blockquote>
-            <span className="absolute -bottom-4 left-12 h-0 w-0 border-l-[18px] border-t-[18px] border-l-transparent border-t-quote-line" />
-          </figure>
-          <figcaption className="mt-8 flex items-center justify-between gap-4 pl-4">
-            <div>
-              <p className="font-display text-base font-semibold text-ink">
-                {current.name}
-              </p>
-              <p className="text-sm">{current.role}</p>
-            </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className="grid h-10 w-10 place-items-center border border-line text-ink"
-                aria-label="Previous note"
-                onClick={handlePrev}
-              >
-                ‹
-              </button>
-              <button
-                type="button"
-                className="grid h-10 w-10 place-items-center border border-line text-ink"
-                aria-label="Next note"
-                onClick={handleNext}
-              >
-                ›
-              </button>
-            </div>
-          </figcaption>
-        </div> */}
     </div>
   );
 };

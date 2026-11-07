@@ -127,27 +127,33 @@ button {
 }
 
 .panel {
-  overflow: hidden;
+  overflow: auto;
+  background: var(--color-page);
   opacity: 0;
-  transform: translateY(56px);
+  transform: translate3d(0, 100%, 0);
   z-index: 0;
+  pointer-events: none;
+  backface-visibility: hidden;
 }
 
 .panel.is-before {
-  transform: translateY(-56px);
+  transform: translate3d(0, -100%, 0);
+}
+
+.panel.is-leave {
+  opacity: 1;
+  z-index: 1;
 }
 
 .panel.is-current {
-  overflow: auto;
   opacity: 1;
-  transform: none;
-  z-index: 10;
+  transform: translate3d(0, 0, 0);
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .stage.is-live .panel {
-  transition:
-    opacity 0.55s ease,
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .enter {

@@ -1,6 +1,4 @@
 import { useEffect, useRef } from "react"
-import type { Project } from "../data/portfolio"
-import Tile from "./Tile"
 
 export type ModalData = {
   title: string
@@ -8,7 +6,6 @@ export type ModalData = {
   summary: string
   points: string[]
   meta: { label: string; value: string }[]
-  art?: Project["art"]
 }
 
 type ModalProps = {
@@ -48,11 +45,6 @@ const Modal = ({ data, onClose }: ModalProps) => {
             <path d="M2 2l10 10M12 2 2 12" fill="none" stroke="currentColor" strokeWidth="1.6" />
           </svg>
         </button>
-        {data.art ? (
-          <div className="mb-8 h-52 overflow-hidden">
-            <Tile art={data.art} label={data.title} />
-          </div>
-        ) : null}
         <p className="font-display text-xs font-semibold uppercase text-muted">{data.kicker}</p>
         <h3 id="modal-title" className="mt-2 font-display text-2xl font-extrabold text-ink">
           {data.title}
