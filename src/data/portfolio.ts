@@ -53,7 +53,7 @@ export const profile = {
   github: "https://github.com/qtnkaca1003",
   linkedin: "https://linkedin.com/in/qtnkaca",
   facebook: "https://www.facebook.com/qtn.kaca",
-  cvHref: "/TrongNhan_FrontendEngineer.pdf",
+  cvHref: "/TrongNhan_FrontEndEngineer.pdf",
   portrait: "/portrait.jpg",
   nhan: "/nhanqt.jpg",
   summary:

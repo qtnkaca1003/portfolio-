@@ -58,7 +58,7 @@ const Contact = () => {
         <a
           className="inline-flex items-center justify-center gap-2 bg-ink px-10 pb-3 pt-3 font-display text-sm font-medium text-on-ink no-underline transition-transform hover:-translate-y-px hover:opacity-70"
           href={profile.cvHref}
-          download
+          download="TrongNhan_FrontEndEngineer.pdf"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
             <path fill="currentColor" d={marks.Download} />

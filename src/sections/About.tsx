@@ -112,9 +112,9 @@ const About = ({ active }: AboutProps) => {
           ])}
         </div>
         <a
-          className="mt-6 inline-flex items-center gap-2 bg-ink px-10 pb-3.5 pt-2.5 font-display text-sm font-medium text-on-ink no-underline transition-transform hover:-translate-y-px"
+          className="mt-6 inline-flex items-center gap-2 bg-ink px-10 py-3 font-display text-sm font-medium text-on-ink no-underline transition-transform hover:-translate-y-px"
           href={profile.cvHref}
-          download
+          download="TrongNhan_FrontEndEngineer.pdf"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
             <path fill="currentColor" d={marks.Download} />
