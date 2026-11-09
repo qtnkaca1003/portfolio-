@@ -34,7 +34,7 @@ const Home = () => {
   return (
     <div className="enter flex min-h-full items-center justify-center px-5 py-24">
       <div className="flex w-full max-w-[880px] flex-col items-center gap-8 text-center min-[1040px]:flex-row min-[1040px]:text-left">
-        <div className="morph h-[350px] w-[350px] shrink-0 overflow-hidden min-[1040px]:h-[350px] min-[1040px]:w-[350px]">
+        <div className="morph h-[250px] w-[250px] shrink-0 overflow-hidden min-[1040px]:h-[250px] min-[1040px]:w-[250px]">
           <img
             src={profile.portrait}
             alt=""
