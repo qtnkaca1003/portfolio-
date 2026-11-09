@@ -8,6 +8,7 @@ import { pages, type PageId } from "./data/portfolio"
 import About from "./sections/About"
 import Contact from "./sections/Contact"
 import Home from "./sections/Home"
+import { LocaleProvider } from "./i18n"
 import { ThemeProvider } from "./theme"
 import Products from "./sections/Products"
 
@@ -191,9 +192,11 @@ const Shell = () => {
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <Shell />
-    </ThemeProvider>
+    <LocaleProvider>
+      <ThemeProvider>
+        <Shell />
+      </ThemeProvider>
+    </LocaleProvider>
   )
 }
 

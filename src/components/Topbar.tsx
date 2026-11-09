@@ -1,5 +1,7 @@
 import type { MouseEvent } from "react"
 import { pages, type PageId } from "../data/portfolio"
+import { useLocale } from "../i18n"
+import LanguageSelect from "./LanguageSelect"
 import ThemeToggle from "./ThemeToggle"
 
 type TopbarProps = {
@@ -10,6 +12,8 @@ type TopbarProps = {
 }
 
 const Topbar = ({ active, isOpen, onToggle, onSelect }: TopbarProps) => {
+  const { copy } = useLocale()
+
   const handleSelect = (event: MouseEvent<HTMLAnchorElement>, id: PageId) => {
     event.preventDefault()
     onSelect(id)
@@ -22,13 +26,16 @@ const Topbar = ({ active, isOpen, onToggle, onSelect }: TopbarProps) => {
           NHAN
         </a>
         <div className="flex items-center gap-4">
-          <ThemeToggle />
+          <div className="flex flex-col items-end gap-1">
+            <ThemeToggle />
+            <LanguageSelect />
+          </div>
           <button
             type="button"
             className="grid h-11 w-11 place-items-center text-ink"
             aria-expanded={isOpen}
             aria-controls="mobile-nav"
-            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-label={isOpen ? copy.menuClose : copy.menuOpen}
             onClick={onToggle}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -42,7 +49,7 @@ const Topbar = ({ active, isOpen, onToggle, onSelect }: TopbarProps) => {
         </div>
       </div>
       {isOpen ? (
-        <nav id="mobile-nav" className="fixed inset-0 top-16 z-30 bg-side px-6 py-4" aria-label="Mobile">
+        <nav id="mobile-nav" className="fixed inset-0 top-16 z-30 bg-side px-6 py-4" aria-label={copy.mobileNav}>
           <ul>
             {pages.map((page) => (
               <li key={page.id} className="border-b border-line">
@@ -52,7 +59,7 @@ const Topbar = ({ active, isOpen, onToggle, onSelect }: TopbarProps) => {
                   aria-current={active === page.id ? "page" : undefined}
                   onClick={(event) => handleSelect(event, page.id)}
                 >
-                  {page.label}
+                  {copy.pages[page.id]}
                 </a>
               </li>
             ))}

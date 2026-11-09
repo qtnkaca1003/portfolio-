@@ -1,14 +1,15 @@
+import { useLocale } from "../i18n"
 import { useTheme } from "../theme"
 
 const ThemeToggle = () => {
   const { theme, handleToggleTheme } = useTheme()
-  const next = theme === "dark" ? "light" : "dark"
+  const { copy } = useLocale()
 
   return (
     <button
       type="button"
       className="inline-flex items-center gap-2 font-display text-[13px] font-medium text-muted transition-colors hover:text-ink"
-      aria-label={`Switch to ${next} theme`}
+      aria-label={theme === "dark" ? copy.themeToLight : copy.themeToDark}
       aria-pressed={theme === "dark"}
       onClick={handleToggleTheme}
     >
@@ -22,7 +23,7 @@ const ThemeToggle = () => {
           <path d="M10.2 1.6a6.2 6.2 0 1 0 4.2 9.6 5 5 0 0 1-4.2-9.6Z" fill="none" stroke="currentColor" strokeWidth="1.4" />
         </svg>
       )}
-      {theme === "dark" ? "Light" : "Dark"}
+      {theme === "dark" ? copy.themeLight : copy.themeDark}
     </button>
   )
 }

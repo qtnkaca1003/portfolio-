@@ -1,24 +1,24 @@
 import { useState, type FormEvent } from "react";
 import SectionTitle from "../components/SectionTitle";
 import { marks, profile } from "../data/portfolio";
+import { useLocale } from "../i18n";
 
 const Contact = () => {
+  const { copy } = useLocale();
+  const text = copy.contact;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [notice, setNotice] = useState("");
-  const [sent, setSent] = useState("");
+  const [status, setStatus] = useState<"idle" | "required" | "sent">("idle");
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) {
-      setSent("");
-      setNotice("Please fill in name, email, and a message.");
+      setStatus("required");
       return;
     }
-    setNotice("");
-    setSent("Opening your email app with this message.");
-    const subject = encodeURIComponent(`Portfolio note from ${name.trim()}`);
+    setStatus("sent");
+    const subject = encodeURIComponent(text.subject(name.trim()));
     const body = encodeURIComponent(
       `${message.trim()}\n\n${name.trim()}\n${email.trim()}`,
     );
@@ -27,13 +27,13 @@ const Contact = () => {
 
   return (
     <div className="enter mx-auto w-full max-w-[968px] px-5 py-24 sm:px-10">
-      <SectionTitle kicker="Contact" title="Get in Touch" />
+      <SectionTitle kicker={text.kicker} title={text.title} />
       <div className="mb-12 grid place-items-center px-6  text-center">
         <p className="font-display text-xs font-semibold uppercase text-muted">
-          Based in
+          {text.based}
         </p>
         <p className="font-display text-3xl font-extrabold text-ink">
-          {profile.location}
+          {copy.location}
         </p>
       </div>
       <div className="mb-10 grid gap-4 sm:grid-cols-3">
@@ -63,31 +63,33 @@ const Contact = () => {
           <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
             <path fill="currentColor" d={marks.Download} />
           </svg>
-          Download CV
+          {text.download}
         </a>
       </div>
       <form onSubmit={handleSubmit} noValidate>
-        {notice ? (
-          <p className="mb-3 font-medium text-[#f52225]">{notice}</p>
+        {status === "required" ? (
+          <p className="mb-3 font-medium text-[#f52225]">{text.required}</p>
         ) : null}
-        {sent ? <p className="mb-3 font-medium text-ink">{sent}</p> : null}
+        {status === "sent" ? (
+          <p className="mb-3 font-medium text-ink">{text.sent}</p>
+        ) : null}
         <div className="grid gap-6 sm:grid-cols-2">
           <label className="block">
-            <span className="sr-only">Name</span>
+            <span className="sr-only">{text.name}</span>
             <input
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Name"
+              placeholder={text.name}
               className="w-full border border-line bg-transparent px-4 py-3 text-ink outline-none focus:border-ink"
               name="name"
             />
           </label>
           <label className="block">
-            <span className="sr-only">Email</span>
+            <span className="sr-only">{text.email}</span>
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="Email"
+              placeholder={text.email}
               type="email"
               className="w-full border border-line bg-transparent px-4 py-3 text-ink outline-none focus:border-ink"
               name="email"
@@ -95,11 +97,11 @@ const Contact = () => {
           </label>
         </div>
         <label className="mt-6 block">
-          <span className="sr-only">Message</span>
+          <span className="sr-only">{text.message}</span>
           <textarea
             value={message}
             onChange={(event) => setMessage(event.target.value)}
-            placeholder="Message"
+            placeholder={text.message}
             className="h-[120px] w-full resize-none border border-line bg-transparent px-4 py-3 text-ink outline-none focus:border-ink"
             name="message"
           />
@@ -108,7 +110,7 @@ const Contact = () => {
           type="submit"
           className="mt-2 bg-ink px-10 pb-3.5 pt-2.5 font-display text-sm font-medium text-on-ink transition-transform hover:-translate-y-px"
         >
-          Send message
+          {text.send}
         </button>
       </form>
     </div>

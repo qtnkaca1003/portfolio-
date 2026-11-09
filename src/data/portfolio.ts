@@ -9,43 +9,29 @@ export type Project = {
   name: string
   company: string
   period: string
-  title: string
-  summary: string
-  points: string[]
   stack: string[]
   group: "XSofts" | "Runsystem"
 }
 
-export const pages: { id: PageId; label: string }[] = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "products", label: "Products" },
-  { id: "contact", label: "Contact" },
+export const pages: { id: PageId }[] = [
+  { id: "home" },
+  { id: "about" },
+  { id: "products" },
+  { id: "contact" },
 ]
 
 export const profile = {
   name: "Quach Trong Nhan",
-  role: "Frontend Developer",
-  roles: ["FrontEnd Developer", "React Developer", "Next.js Developer", "Vue.js Developer"],
   email: "dhnhan19999@gmail.com",
   phone: "084 911 9919",
   phoneHref: "tel:+84849119919",
-  location: "Ho Chi Minh City",
   github: "https://github.com/qtnkaca1003",
   linkedin: "https://linkedin.com/in/qtnkaca",
   facebook: "https://www.facebook.com/qtn.kaca",
   cvHref: "/TrongNhan_FrontEndEngineer.pdf",
   portrait: "/portrait.jpg",
-  summary:
-    "Frontend Software Engineer with 3+ years across POS, banking, workforce management, and enterprise applications. I build responsive, maintainable interfaces with React.js, Next.js, TypeScript, Redux, and Material UI, and integrate them with REST APIs.",
-  about:
-    "I have shipped a salon POS platform serving 3,000+ merchants and enterprise applications for Japanese clients. I work with designers and backend developers in Agile teams, and I use AI coding agents such as GitHub Copilot, Codex, Claude Code, and Cursor. " +
-    "One specialty is taking a module from a requirement through to a screen that staff can use every day, then staying with the bugs and the QC notes after it ships.",
   birthday: "10.03.1999",
   age: new Date().getFullYear() - 1999,
-  nationality: "Vietnam",
-  interest: "Product interfaces",
-  freelance: "Available",
 }
 
 export const socialLinks: SocialLink[] = [
@@ -56,20 +42,15 @@ export const socialLinks: SocialLink[] = [
 
 export const resume = {
   education: {
-    school: "Saigon University of Technology",
-    degree: "Information technology",
-    note: "Classification Good",
     period: "2017 – 2021",
   },
   jobs: [
     {
       company: "Xsofts",
-      role: "Frontend developer",
       period: "Dec 2025 – Jul 2026",
     },
     {
       company: "GMO-Z.com Runsystem",
-      role: "Frontend developer",
       period: "Oct 2022 – Dec 2025",
     },
   ],
@@ -82,7 +63,6 @@ export const resume = {
   ],
   languageSkills: [
     { name: "Vietnamese", value: 100 },
-    { name: "English", value: 70 },
   ],
   knowledge: [
     "React, TypeScript, Next.js",
@@ -91,7 +71,6 @@ export const resume = {
     "REST, Axios, TanStack Query",
     "Firebase, Socket.IO, DexieJS",
   ],
-  interests: ["Product interfaces", "Booking flows", "Salon POS screens", "API-backed pages", "Accessible UI"],
 }
 
 export const projects: Project[] = [
@@ -99,18 +78,6 @@ export const projects: Project[] = [
     name: "POS System",
     company: "XSofts",
     period: "Dec 2025 – Jul 2026",
-    title: "Runs the salon day",
-    summary:
-      "Point of sale for salon and retail. The day covers appointment scheduling, customers, the waiting list, check-in, tickets, payment, the portal, and receipt printing. The platform serves 3,000 merchants.",
-    points: [
-      "Built and maintained features from business requirements, merchant requests, and daily operations.",
-      "Owned Appointment Scheduling, Waiting List, Customer Management, Portal, and Check-in.",
-      "Shipped improvements from QC/QA feedback.",
-      "Investigated bugs and production issues reported by merchants.",
-      "Supported Ticket Management and Receipt Printing.",
-      "Worked with the team, QC/QA, and stakeholders to clarify requirements.",
-      "Proposed changes that improved usability, performance, and the interface.",
-    ],
     stack: ["ReactJS", "DexieJS", "Material UI", "Socket.IO", "Syncfusion", "Redux", "React Hook Form"],
     group: "XSofts",
   },
@@ -118,15 +85,6 @@ export const projects: Project[] = [
     name: "Booking Online",
     company: "XSofts",
     period: "Dec 2025 – Jul 2026",
-    title: "Books a nail appointment",
-    summary: "Online booking for nail appointments across salon locations. The flow also takes a deposit, an OTP check, and reCAPTCHA.",
-    points: [
-      "Built and updated booking features from business and merchant requirements.",
-      "Fixed bugs in the booking interface and the workflow.",
-      "Shortened the steps so a customer can finish a reservation more easily.",
-      "Kept deposit payment, OTP verification, and reCAPTCHA on the flow.",
-      "Worked with the team on the existing booking screens.",
-    ],
     stack: ["ReactJS", "React Query", "MobX", "Ant Design", "Tailwind", "SCSS"],
     group: "XSofts",
   },
@@ -134,14 +92,6 @@ export const projects: Project[] = [
     name: "Gensai",
     company: "GMO-Z.com Runsystem",
     period: "Oct 2024 – Dec 2025",
-    title: "Posts a disaster alert",
-    summary:
-      "Disaster alerts for Japan, built in the same months as Remote Work Cloud. People photograph an event, post the image, and share the location while it is happening.",
-    points: [
-      "A visitor can register, or post an alert without an account.",
-      "The post takes a camera photo or an upload, plus the disaster location.",
-      "Each alert has comments, and the screens load from a REST API.",
-    ],
     stack: ["React 18", "Tailwind CSS", "Axios", "REST API", "TanStack Query"],
     group: "Runsystem",
   },
@@ -149,12 +99,6 @@ export const projects: Project[] = [
     name: "Remote Work Cloud",
     company: "GMO-Z.com Runsystem",
     period: "Oct 2024 – Dec 2025",
-    title: "Tracks a remote team",
-    summary: "Remote workforce management, with reusable Vue 3 and Nuxt 3 screens.",
-    points: [
-      "Built responsive screens and reusable components for workforce features.",
-      "Integrated the REST API through Axios with the backend team.",
-    ],
     stack: ["Vue 3", "Nuxt 3", "Axios", "REST API"],
     group: "Runsystem",
   },
@@ -162,13 +106,6 @@ export const projects: Project[] = [
     name: "Sumika Kanri",
     company: "GMO-Z.com Runsystem",
     period: "Nov 2022 – Oct 2024",
-    title: "Lists a bank loan",
-    summary: "Loan information for a Japanese bank: listings, application forms, and approval steps.",
-    points: [
-      "Built the modules in React.js and TypeScript.",
-      "Integrated REST APIs and Firebase, and managed async data with Redux and RxJS.",
-      "Kept the interface stable across screen sizes.",
-    ],
     stack: ["React.js", "TypeScript", "Redux", "RxJS", "Firebase"],
     group: "Runsystem",
   },
@@ -176,12 +113,6 @@ export const projects: Project[] = [
     name: "Kobelco ER",
     company: "GMO-Z.com Runsystem",
     period: "Oct 2022 – Nov 2022",
-    title: "Files a leave request",
-    summary: "Internal leave management: create, update, and read an employee leave request.",
-    points: [
-      "Built the React.js forms for the leave workflow.",
-      "Integrated REST APIs with Axios and kept state in Redux.",
-    ],
     stack: ["React.js", "Redux", "Axios", "REST API"],
     group: "Runsystem",
   },

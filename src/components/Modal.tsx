@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+import { useLocale } from "../i18n"
 
 export type ModalData = {
   title: string
@@ -14,6 +15,7 @@ type ModalProps = {
 }
 
 const Modal = ({ data, onClose }: ModalProps) => {
+  const { copy } = useLocale()
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const Modal = ({ data, onClose }: ModalProps) => {
           ref={closeRef}
           type="button"
           className="absolute right-4 top-4 grid h-9 w-9 place-items-center bg-ink text-on-ink"
-          aria-label="Close"
+          aria-label={copy.close}
           onClick={onClose}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">

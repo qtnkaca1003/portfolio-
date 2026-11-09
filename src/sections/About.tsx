@@ -1,5 +1,7 @@
 import SectionTitle from "../components/SectionTitle";
+import { formatPeriod } from "../data/copy";
 import { marks, profile, resume } from "../data/portfolio";
+import { useLocale } from "../i18n";
 
 type AboutProps = {
   active: boolean;
@@ -31,7 +33,7 @@ const info = (rows: { label: string; value: string; href?: string }[]) => (
   <ul>
     {rows.map((row) => (
       <li key={row.label} className="flex gap-3">
-        <span className="w-[100px] shrink-0 font-bold text-ink">
+        <span className="w-[7.5rem] shrink-0 font-bold text-ink">
           {row.label}:
         </span>
         {row.href ? (
@@ -50,37 +52,40 @@ const info = (rows: { label: string; value: string; href?: string }[]) => (
 );
 
 const About = ({ active }: AboutProps) => {
+  const { locale, copy } = useLocale();
+  const about = copy.about;
+
   return (
     <div className="enter w-full ">
       <div className="mx-auto w-full max-w-[968px] px-5 py-10 sm:px-10">
-        <SectionTitle kicker="About" title="About Me" />
+        <SectionTitle kicker={about.kicker} title={about.title} />
         <div className="border-b border-line pb-5">
           <h3 className="font-display text-[22px] font-bold text-ink">
             {profile.name}
           </h3>
-          <p className="text-ink">{profile.role}</p>
+          <p className="text-ink">{about.role}</p>
         </div>
         <div className="border-b border-line py-7">
-          <p>{profile.about}</p>
+          <p>{about.body}</p>
         </div>
         <div className="grid gap-8 border-b border-line py-8 md:grid-cols-2">
           {info([
-            { label: "Birthday", value: profile.birthday },
-            { label: "Age", value: profile.age.toString() },
-            { label: "Address", value: profile.location },
+            { label: about.birthday, value: profile.birthday },
+            { label: about.age, value: profile.age.toString() },
+            { label: about.address, value: copy.location },
             {
-              label: "Email",
+              label: about.email,
               value: profile.email,
               href: `mailto:${profile.email}`,
             },
-            { label: "Phone", value: profile.phone, href: profile.phoneHref },
+            { label: about.phone, value: profile.phone, href: profile.phoneHref },
           ])}
           {info([
-            { label: "Nationality", value: profile.nationality },
-            { label: "Study", value: resume.education.school },
-            { label: "Degree", value: resume.education.degree },
-            { label: "Interest", value: profile.interest },
-            { label: "Freelance", value: profile.freelance },
+            { label: about.nationality, value: about.nationalityValue },
+            { label: about.study, value: about.school },
+            { label: about.degreeLabel, value: about.degree },
+            { label: about.interestLabel, value: about.interest },
+            { label: about.freelanceLabel, value: about.freelance },
           ])}
         </div>
         <a
@@ -91,7 +96,7 @@ const About = ({ active }: AboutProps) => {
           <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
             <path fill="currentColor" d={marks.Download} />
           </svg>
-          Download CV
+          {about.download}
         </a>
       </div>
 
@@ -99,15 +104,21 @@ const About = ({ active }: AboutProps) => {
         <div className="mx-auto grid w-full max-w-[968px] gap-12 px-5 sm:px-10 md:grid-cols-2 md:gap-16">
           <div>
             <h3 className="mb-6 font-display text-xl font-bold text-ink">
-              Programming Skills
+              {about.programming}
             </h3>
             {bars(active, resume.programSkills)}
           </div>
           <div>
             <h3 className="mb-6 font-display text-xl font-bold text-ink">
-              Language Skills
+              {about.languages}
             </h3>
-            {bars(active, resume.languageSkills)}
+            {bars(
+              active,
+              resume.languageSkills.map((item) => ({
+                ...item,
+                name: about.languageNames[item.name] ?? item.name,
+              })),
+            )}
           </div>
         </div>
       </div>
@@ -116,7 +127,7 @@ const About = ({ active }: AboutProps) => {
         <div className="grid gap-12 py-16 md:grid-cols-2">
           <div>
             <h3 className="mb-4 font-display text-xl font-bold text-ink">
-              Knowledge
+              {about.knowledge}
             </h3>
             <ul>
               {resume.knowledge.map((item) => (
@@ -128,10 +139,10 @@ const About = ({ active }: AboutProps) => {
           </div>
           <div>
             <h3 className="mb-4 font-display text-xl font-bold text-ink">
-              Interests
+              {about.interests}
             </h3>
             <ul>
-              {resume.interests.map((item) => (
+              {about.interestItems.map((item) => (
                 <li key={item} className="border-b border-line py-2 text-ink">
                   {item}
                 </li>
@@ -145,23 +156,23 @@ const About = ({ active }: AboutProps) => {
           <div className="grid gap-12 border-t border-line py-16 md:grid-cols-2">
             <div>
               <h3 className="mb-6 font-display text-xl font-bold text-ink">
-                Education
+                {about.education}
               </h3>
               <div className="border-l border-line pl-6">
                 <p className="font-display text-sm text-muted">
                   {resume.education.period}
                 </p>
                 <h4 className="font-display text-base font-semibold text-ink">
-                  {resume.education.school}
+                  {about.school}
                 </h4>
                 <p>
-                  {resume.education.degree} · {resume.education.note}
+                  {about.degree} · {about.note}
                 </p>
               </div>
             </div>
             <div>
               <h3 className="mb-6 font-display text-xl font-bold text-ink">
-                Experience
+                {about.experience}
               </h3>
               <ul className="border-l border-line">
                 {resume.jobs.map((job) => (
@@ -171,12 +182,12 @@ const About = ({ active }: AboutProps) => {
                   >
                     <span className="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-ink" />
                     <p className="font-display text-sm text-muted">
-                      {job.period}
+                      {formatPeriod(job.period, locale)}
                     </p>
                     <h4 className="font-display text-base font-semibold text-ink">
                       {job.company}
                     </h4>
-                    <p>{job.role}</p>
+                    <p>{about.jobRole}</p>
                   </li>
                 ))}
               </ul>

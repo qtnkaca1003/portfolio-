@@ -1,5 +1,7 @@
 import type { MouseEvent } from "react"
 import { pages, profile, type PageId } from "../data/portfolio"
+import { useLocale } from "../i18n"
+import LanguageSelect from "./LanguageSelect"
 import ThemeToggle from "./ThemeToggle"
 
 type SidebarProps = {
@@ -8,6 +10,8 @@ type SidebarProps = {
 }
 
 const Sidebar = ({ active, onSelect }: SidebarProps) => {
+  const { copy } = useLocale()
+
   const handleSelect = (event: MouseEvent<HTMLAnchorElement>, id: PageId) => {
     event.preventDefault()
     onSelect(id)
@@ -19,7 +23,7 @@ const Sidebar = ({ active, onSelect }: SidebarProps) => {
         <a href="#home" className="font-logo text-[31px] font-black tracking-[5px] text-ink no-underline" onClick={(event) => handleSelect(event, "home")}>
           NHAN
         </a>
-        <nav className="py-[50px]" aria-label="Primary">
+        <nav className="py-[50px]" aria-label={copy.nav}>
           <ul>
             {pages.map((page) => {
               const isCurrent = active === page.id
@@ -31,18 +35,21 @@ const Sidebar = ({ active, onSelect }: SidebarProps) => {
                     aria-current={isCurrent ? "page" : undefined}
                     onClick={(event) => handleSelect(event, page.id)}
                   >
-                    {page.label}
+                    {copy.pages[page.id]}
                   </a>
                 </li>
               )
             })}
           </ul>
         </nav>
-        <ThemeToggle />
+        <div className="flex flex-col items-start gap-4">
+          <ThemeToggle />
+          <LanguageSelect />
+        </div>
         <p className="mt-8 font-display text-[15px] leading-6 text-soft">
           © {new Date().getFullYear()} {profile.name}
           <br />
-          Ho Chi Minh City
+          {copy.location}
         </p>
       </div>
     </aside>
