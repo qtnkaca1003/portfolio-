@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import Cursor from "./components/Cursor"
 import Modal, { type ModalData } from "./components/Modal"
 import Preloader from "./components/Preloader"
+import ScrollHint from "./components/ScrollHint"
 import Sidebar from "./components/Sidebar"
 import Topbar from "./components/Topbar"
 import { pages, type PageId } from "./data/portfolio"
@@ -183,6 +184,7 @@ const Shell = () => {
               </section>
             )
           })}
+          {ready && !modal && !isOpen ? <ScrollHint up={section === pages[pages.length - 1]?.id} /> : null}
         </div>
       </main>
       {modal ? <Modal data={modal} onClose={handleCloseModal} /> : null}

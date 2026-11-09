@@ -160,6 +160,51 @@ button {
   animation: fade-up 0.7s ease both;
 }
 
+.scroll-hint {
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  z-index: 15;
+  width: 1px;
+  height: 200px;
+  overflow: hidden;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--color-ink) 16%, transparent);
+  transform: translateY(-50%);
+}
+
+.scroll-hint::after {
+  content: "";
+  position: absolute;
+  left: -0.5px;
+  width: 2px;
+  height: 64px;
+  background: linear-gradient(to bottom, transparent, var(--color-ink) 35%, var(--color-ink) 70%, transparent);
+  animation: scroll-line 1.8s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+.scroll-hint.is-up::after {
+  background: linear-gradient(to top, transparent, var(--color-ink) 35%, var(--color-ink) 70%, transparent);
+  animation-direction: reverse;
+}
+
+@keyframes scroll-line {
+  0% {
+    top: -64px;
+    opacity: 0;
+  }
+  16% {
+    opacity: 1;
+  }
+  84% {
+    opacity: 1;
+  }
+  100% {
+    top: 200px;
+    opacity: 0;
+  }
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;

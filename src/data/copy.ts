@@ -23,6 +23,8 @@ type Copy = {
   mobileNav: string
   loading: string
   close: string
+  scroll: string
+  scrollUp: string
   location: string
   home: {
     hello: string
@@ -105,6 +107,8 @@ const en: Copy = {
   mobileNav: "Mobile",
   loading: "Loading",
   close: "Close",
+  scroll: "Scroll down",
+  scrollUp: "Scroll up",
   location: "Ho Chi Minh City",
   home: {
     hello: "Hello, it's Me",
@@ -247,6 +251,8 @@ const vi: Copy = {
   mobileNav: "Menu di động",
   loading: "Đang tải",
   close: "Đóng",
+  scroll: "Cuộn xuống",
+  scrollUp: "Cuộn lên",
   location: "Thành phố Hồ Chí Minh",
   home: {
     hello: "Xin chào, tôi là",
